@@ -1,0 +1,1 @@
+// essa classe serve para declarar as funções auxiliares em nosso código
