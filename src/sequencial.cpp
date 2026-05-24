@@ -4,12 +4,9 @@
 
 using namespace std;
 
-vector<double> jacobi_sequencial(
-    vector<vector<double>>& A,
-    vector<double>& b,
-    int max_iter,
-    double epsilon
-) {
+vector<double> jacobi_sequencial( vector<vector<double>>& A, vector<double>& b,
+                                int max_iter, double epsilon) {
+                                    
     int n = A.size();
 
     vector<double> x_old(n, 0.0);

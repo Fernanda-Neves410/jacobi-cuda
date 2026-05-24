@@ -1,11 +1,7 @@
 #include "utils.h"
 #include <cmath>
 
-void gerar_matriz(
-    vector<vector<double>>& A,
-    vector<double>& b,
-    int n
-) {
+void gerar_matriz(vector<vector<double>>& A, vector<double>& b, int n) {
 
     for (int i = 0; i < n; i++) {
 
@@ -26,13 +22,8 @@ void gerar_matriz(
 }
 
 
-void converter_matriz_para_vetor(
-    vector<vector<double>>& A,
-    vector<double>& b,
-    double *h_A,
-    double *h_b,
-    int n
-) {
+void converter_matriz_para_vetor(vector<vector<double>>& A, vector<double>& b,
+                                double *h_A, double *h_b, int n) {
 
     for (int linha = 0; linha < n; linha++) {
 
@@ -47,11 +38,7 @@ void converter_matriz_para_vetor(
 }
 
 
-double calcular_diferenca(
-    vector<double>& resultado_cpu,
-    double *resultado_gpu,
-    int n
-) {
+double calcular_diferenca(vector<double>& resultado_cpu, double *resultado_gpu, int n) {
 
     double diferenca = 0.0;
 
