@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <omp.h>
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
@@ -18,7 +17,7 @@ int main() {
             speedup, eficiencia;
 
     // alterar tamanho da matriz
-    int n = 1000;
+    int n = 100;
 
     vector<vector<double>> A(n, vector<double>(n, 0.0));
     vector<double> b(n, 0.0);
@@ -39,14 +38,16 @@ int main() {
             b[i] = (i + 1) * 2.0; 
     }
 
-    //  sequencial
-    temp_inicial = omp_get_wtime();
+    // sequencial
+    auto inicio_seq = std::chrono::high_resolution_clock::now();
     auto resultado = jacobi_sequencial(A, b, max_iter, epsilon);
-    temp_final = omp_get_wtime();
-    temp_total = temp_final - temp_inicial;
-    double temp_seq = temp_total;
-    cout << "Tempo sequencial: " << temp_seq << "s\n\n";
+    auto fim_seq = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> tempo_gasto_seq = fim_seq - inicio_seq;
+    temp_total = tempo_gasto_seq.count(); 
+    cout << "Tempo sequencial: " << temp_total << "s\n\n";
 
+
+    // Paralela
     double *h_A = new double[n * n];
     double *h_b = new double[n];
     double *h_x_final = new double[n];
@@ -65,6 +66,8 @@ int main() {
     executar_jacobi_cuda(h_A, h_b, h_x_final, n, epsilon, max_iter);
     auto fim = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> tempo_gasto = fim - inicio;
+    temp_total = tempo_gasto.count(); 
+    cout << "Tempo Paralelo: " << temp_total << "s\n\n";
     
 
     return 0;
