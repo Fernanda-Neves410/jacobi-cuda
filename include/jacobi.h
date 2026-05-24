@@ -13,12 +13,10 @@ vector<double> jacobi_sequencial(
 );
 
 // Versão paralela com CUDA
-// blockSize servirá para dizer qual o tamanho do bloco
-// que estamos trabalhando na GPU
-vector<double> jacobi_cuda(
+vector<double> executar_jacobi_cuda(
     vector<vector<double>>& A,
     vector<double>& b,
-    int max_iter,
+    int n,
     double epsilon,
-    int blockSize
+    int max_iter
 );
