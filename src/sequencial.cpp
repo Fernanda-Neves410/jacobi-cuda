@@ -32,12 +32,16 @@ vector<double> jacobi_sequencial(
 
         // Calcula erro
         double erro = 0.0;
+        double norma = 0.0;
 
         for (int i = 0; i < n; i++) {
+
             erro += pow(x_new[i] - x_old[i], 2);
+
+            norma += pow(x_new[i], 2);
         }
 
-        erro = sqrt(erro);
+        erro = sqrt(erro) / sqrt(norma);
 
         // Verifica convergência
         if (erro < epsilon) {
