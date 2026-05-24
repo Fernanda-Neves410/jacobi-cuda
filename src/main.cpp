@@ -40,11 +40,14 @@ int main() {
     }
 
     //  sequencial
-    temp_inicial = omp_get_wtime();
+    auto inicio_seq = std::chrono::high_resolution_clock::now();
+
     auto resultado = jacobi_sequencial(A, b, max_iter, epsilon);
-    temp_final = omp_get_wtime();
-    temp_total = temp_final - temp_inicial;
-    double temp_seq = temp_total;
+
+    auto fim_seq = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> temp_seq = fim_seq - inicio_seq;
+
     cout << "Tempo sequencial: " << temp_seq << "s\n\n";
 
     double *h_A = new double[n * n];
@@ -66,6 +69,32 @@ int main() {
     auto fim = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> tempo_gasto = fim - inicio;
     
+
+    double tempo_cuda = tempo_gasto.count();
+
+    speedup = temp_seq / tempo_cuda;
+
+    cout << "Speedup: "
+        << speedup
+        << endl;
+
+    cout << "Tempo CUDA: "
+     << tempo_gasto.count()
+     << "s\n";
+
+    double diferenca = 0.0;
+
+    for (int i = 0; i < n; i++) {
+        diferenca += abs(resultado[i] - h_x_final[i]);
+    }
+
+    cout << "Diferenca CPU vs GPU: "
+        << diferenca
+        << endl;
+
+    delete[] h_A;
+    delete[] h_b;
+    delete[] h_x_final;
 
     return 0;
 }
