@@ -3,7 +3,9 @@
 #include <cuda_runtime.h>
 #include "jacobi.h"
 
-__global__ void kernel_jacobi(const double *A, const double *b, const double *x_old, double *x_new, int n) {
+__global__ void kernel_jacobi(const double *A, const double *b, 
+                            const double *x_old, double *x_new, int n) {
+    
     int i = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (i < n) {
@@ -17,7 +19,10 @@ __global__ void kernel_jacobi(const double *A, const double *b, const double *x_
     }
 }
 
-__global__ void kernel_calcula_erro(const double *x_old, const double *x_new, double *erro_global_sq, double *norma_global_sq, int n) {
+__global__ void kernel_calcula_erro(const double *x_old, const double *x_new, 
+                                    double *erro_global_sq, double *norma_global_sq, 
+                                    int n) {
+    
     extern __shared__ double sdata[];
     
     double *s_erro = sdata;
@@ -51,7 +56,8 @@ __global__ void kernel_calcula_erro(const double *x_old, const double *x_new, do
     }
 }
 
-void executar_jacobi_cuda(double *h_A, double *h_b, double *h_x_final, int n, double epsilon, int max_iter) {
+void executar_jacobi_cuda(double *h_A, double *h_b, double *h_x_final, 
+                            int n, double epsilon, int max_iter) {
 
     size_t bytes_matriz = n * n * sizeof(double);
     size_t bytes_vetor  = n * sizeof(double);
@@ -85,8 +91,10 @@ void executar_jacobi_cuda(double *h_A, double *h_b, double *h_x_final, int n, do
         cudaMemset(d_erro, 0, sizeof(double));
         cudaMemset(d_norma, 0, sizeof(double));
 
-        kernel_jacobi<<<blocos_na_grade, threads_por_bloco>>>(d_A, d_b, d_x_old, d_x_new, n);
-        kernel_calcula_erro<<<blocos_na_grade, threads_por_bloco, shared_mem_size>>>(d_x_old, d_x_new, d_erro, d_norma, n);
+        kernel_jacobi<<<blocos_na_grade, threads_por_bloco>>>(d_A, d_b, d_x_old, 
+                                                                d_x_new, n);
+        kernel_calcula_erro<<<blocos_na_grade, threads_por_bloco, shared_mem_size>>>
+                                                (d_x_old, d_x_new, d_erro, d_norma, n);
 
         cudaMemcpy(&erro_sq_host, d_erro, sizeof(double), cudaMemcpyDeviceToHost);
         cudaMemcpy(&norma_sq_host, d_norma, sizeof(double), cudaMemcpyDeviceToHost);
