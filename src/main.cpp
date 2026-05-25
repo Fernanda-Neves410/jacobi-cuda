@@ -13,12 +13,12 @@ extern void executar_jacobi_cuda( double *h_A, double *h_b, double *h_x_final,
 int main() {
 
     double epsilon = 1e-6;
-    int max_iter = 5000;
+    int max_iter = 100000;
 
 
 
     // alterar tamanho da matriz
-    int n = 1000;
+    int n = 2500;
 
     // Cria sistema linear
     vector<vector<double>> A(n, vector<double>(n, 0.0));
