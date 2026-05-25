@@ -18,7 +18,7 @@ int main() {
 
 
     // alterar tamanho da matriz
-    int n = 100;
+    int n = 1000;
 
     // Cria sistema linear
     vector<vector<double>> A(n, vector<double>(n, 0.0));
